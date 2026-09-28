@@ -59,7 +59,7 @@ def check_reservation():
     # ★ 予約サイトに合わせてここを書き換える ★
     # 例：ページ内に「空きあり」という文字があれば通知
     if "空き" in soup.text or "予約可能" in soup.text or "○" in soup.text:
-        send_line_notify("予約に空きが出ました！急いで確認してください！")
+        send_line_message("予約に空きが出ました！急いで確認してください！")
 
 # ===== メインループ =====
 def main():
