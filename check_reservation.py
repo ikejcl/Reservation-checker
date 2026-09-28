@@ -5,19 +5,45 @@ import os
 
 # ===== 設定 =====
 URL = os.getenv("TARGET_URL")  # Railway の環境変数で設定する
-LINE_TOKEN = os.getenv("LINE_TOKEN")  # LINE Notify のトークンも環境変数で設定
+# LINE_TOKEN = os.getenv("LINE_TOKEN")  # LINE Notify のトークンも環境変数で設定
 
 CHECK_INTERVAL = 300  # 5分ごとにチェック（秒）
 
 # ===== LINE通知 =====
-def send_line_notify(message):
-    url = "https://notify-api.line.me/api/notify"
-    headers = {"Authorization": f"Bearer {LINE_TOKEN}"}
-    data = {"message": message}
-    try:
-        requests.post(url, headers=headers, data=data)
-    except Exception as e:
-        print("LINE通知エラー:", e)
+# def send_line_notify(message):
+#     url = "https://notify-api.line.me/api/notify"
+#     headers = {"Authorization": f"Bearer {LINE_TOKEN}"}
+#     data = {"message": message}
+#     try:
+#         requests.post(url, headers=headers, data=data)
+#     except Exception as e:
+#         print("LINE通知エラー:", e)
+
+
+import requests
+import os
+
+LINE_CHANNEL_TOKEN = os.getenv("LINE_CHANNEL_TOKEN")
+LINE_USER_ID = os.getenv("LINE_USER_ID")
+
+def send_line_message(message):
+    url = "https://api.line.me/v2/bot/message/push"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {LINE_CHANNEL_TOKEN}"
+    }
+    data = {
+        "to": LINE_USER_ID,
+        "messages": [
+            {"type": "text", "text": message}
+        ]
+    }
+    requests.post(url, headers=headers, json=data)
+
+
+
+
+
 
 # ===== 空き枠チェック =====
 def check_reservation():
@@ -32,7 +58,7 @@ def check_reservation():
 
     # ★ 予約サイトに合わせてここを書き換える ★
     # 例：ページ内に「空きあり」という文字があれば通知
-    if "空き" in soup.text or "予約可能" in soup.text:
+    if "空き" in soup.text or "予約可能" in soup.text or "○" in soup.text:
         send_line_notify("予約に空きが出ました！急いで確認してください！")
 
 # ===== メインループ =====
