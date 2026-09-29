@@ -20,9 +20,6 @@ CHECK_INTERVAL = 300  # 5分ごとにチェック（秒）
 #         print("LINE通知エラー:", e)
 
 
-import requests
-import os
-
 LINE_CHANNEL_TOKEN = os.getenv("LINE_CHANNEL_TOKEN")
 LINE_USER_ID = os.getenv("LINE_USER_ID")
 
